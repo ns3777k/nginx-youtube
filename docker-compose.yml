@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  nginx:
+    container_name: nginx-youtube
+    image: nginx:1.25.3-alpine
+    volumes:
+      - "./data/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "./data/conf.d:/etc/nginx/conf.d:ro"
+    ports:
+      - "8080:80"
