@@ -1,8 +1,19 @@
 version: '3.8'
 
 services:
+  httpbin:
+    image: kennethreitz/httpbin
+    command: ["gunicorn", "-b", "0.0.0.0:80", "httpbin:app", "-k", "gevent", "--log-level", "debug"]
+    deploy:
+      mode: replicated
+      replicas: 2
+  netcat:
+    image: subfuzion/netcat
+    container_name: nginx-youtube-netcat
+    command: ["-vkl", "8888"]
   nginx:
     container_name: nginx-youtube
+    depends_on: [httpbin, netcat]
     image: nginx:1.25.3-alpine
     volumes:
       - "./data/nginx.conf:/etc/nginx/nginx.conf:ro"
